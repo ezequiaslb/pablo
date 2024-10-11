@@ -1,0 +1,102 @@
+DROP TABLE evento;
+
+CREATE DATABASE monkeygames;
+
+USE monkeygames;
+
+CREATE TABLE jogador(id_jogador INT AUTO_INCREMENT PRIMARY KEY,
+nome_jogador VARCHAR(895) NOT NULL,
+email_jogador VARCHAR(345) NOT NULL UNIQUE,
+telefone_jogador BIGINT NOT NULL UNIQUE,
+cpf_jogador BIGINT NOT NULL UNIQUE,
+senha_jogador VARCHAR(120) NOT NULL
+);
+
+SELECT * FROM organizador;
+
+CREATE TABLE organizador(id_organizador INT AUTO_INCREMENT PRIMARY KEY,
+nome_org VARCHAR(895) NOT NULL,
+email_org VARCHAR(345) NOT NULL UNIQUE,
+telefone_org BIGINT NOT NULL UNIQUE,
+cpf_org BIGINT NOT NULL UNIQUE,
+senha_org VARCHAR(120) NOT NULL
+);
+
+CREATE TABLE adm(id_adm INT AUTO_INCREMENT PRIMARY KEY,
+nome_adm VARCHAR(895) NOT NULL,
+senha_adm VARCHAR(30) DEFAULT 'sysadmin2024'
+);
+
+INSERT INTO adm (nome_adm) VALUES ('Pablo');
+
+SELECT * FROM jogador;
+
+CREATE TABLE genero(id_genero INT AUTO_INCREMENT PRIMARY KEY,
+nome_genero VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE endereco(id_endereco INT AUTO_INCREMENT PRIMARY KEY,
+rua VARCHAR(255) DEFAULT '',
+numero VARCHAR(255) DEFAULT '',
+setor VARCHAR(255) DEFAULT '',
+cidade VARCHAR(255) DEFAULT '',
+estado VARCHAR(255) DEFAULT '',
+pais VARCHAR(255) NOT NULL
+);
+
+select * from endereco;
+
+CREATE TABLE jogo(id_jogo INT AUTO_INCREMENT PRIMARY KEY,
+nome_jogo VARCHAR(400) NOT NULL,
+ano_lancamento YEAR NOT NULL,
+genero_id INT NOT NULL,
+FOREIGN KEY (genero_id) REFERENCES genero(id_genero)
+);
+
+select * from jogo;
+
+CREATE TABLE evento(id_evento INT AUTO_INCREMENT PRIMARY KEY,
+nome_evento VARCHAR(255) NOT NULL,
+data_evento DATETIME NOT NULL,
+inscricao_id INT,
+regras VARCHAR(2000) NOT NULL,
+jogo_id INT NOT NULL,
+FOREIGN KEY (jogo_id) REFERENCES jogo(id_jogo),
+organizador_id INT NOT NULL,
+FOREIGN KEY (organizador_id) REFERENCES organizador(id_organizador),
+endereco_id INT NOT NULL,
+FOREIGN KEY (endereco_id) REFERENCES endereco(id_endereco),
+FOREIGN KEY (inscricao_id) REFERENCES inscricao(id_inscricao)
+);
+
+
+
+INSERT INTO evento (nome_evento, data_evento, inscricao_id, regras, jogo_id, organizador_id, endereco_id) VALUES(
+'Camp amazonas', '2024-10-02', '1', 'hsdvalfhjd vlhdfbhdlv hfd vlhsdf vlhfd lhv hfd vlnf dvl dflsjh vj dfj vh fdjl v', '1', '1', '1'
+);
+
+SELECT 
+    evento.id_evento, 
+    evento.nome_evento, 
+    evento.regras, 
+    COUNT(inscricao.id_inscricao) AS qtd_participantes, 
+    jogo.nome_jogo, 
+    organizador.nome_org, 
+    CONCAT(e_evento.rua, ', ', e_evento.numero, ' - ', e_evento.setor, ', ', e_evento.cidade, ' - ', e_evento.estado, ', ', e_evento.pais) AS endereco_completo
+FROM 
+    evento
+LEFT JOIN inscricao ON evento.inscricao_id = inscricao.id_inscricao
+INNER JOIN jogo ON evento.jogo_id = jogo.id_jogo
+INNER JOIN organizador ON evento.organizador_id = organizador.id_organizador
+INNER JOIN endereco AS e_evento ON evento.endereco_id = e_evento.id_endereco
+GROUP BY evento.id_evento
+ORDER BY evento.data_evento ASC;
+
+CREATE TABLE inscricao(id_inscricao INT AUTO_INCREMENT PRIMARY KEY,
+jogador_id INT NOT NULL,
+FOREIGN KEY (jogador_id) REFERENCES jogador(id_jogador)
+);
+
+SELECT * FROM inscricao;
+
+INSERT INTO inscricao (jogador_id) VALUES ('1');

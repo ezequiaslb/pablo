@@ -1,0 +1,17 @@
+/* O corpo da página ocupa toda a altura da tela */
+html, body {
+    height: 100%;
+    color: rgb(173, 216, 230);
+}
+
+/* O conteúdo principal (todo exceto o footer) deve expandir */
+.content-wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* A section de conteúdo flexível cresce e empurra o footer para o final */
+.flex-grow-1 {
+    flex-grow: 1;
+}
