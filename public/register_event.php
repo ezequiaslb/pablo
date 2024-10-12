@@ -98,82 +98,83 @@
 
                     <form action="../includes/process_register_event.php" method="POST">
 
-                        <input type="hidden" name="id_organizador" value="<?php $_SESSION['orgid'];?>">
-                        
-                        <!-- Campo de nome -->
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Nome do Evento</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
+                    <input type="hidden" name="id_organizador" value="<?php echo $_SESSION['orgid'];?>">
 
-                        <!-- Campo de data -->
-                        <div class="mb-3">
-                            <label for="data" class="form-label">Data e hora do evento</label>
-                            <input type="datetime" class="form-control" id="data" name="data" required>
-                        </div>
+                    <!-- Campo de nome -->
+                    <div class="mb-3">
+                        <label for="nome_evento" class="form-label">Nome do Evento</label>
+                        <input type="text" class="form-control" id="nome_evento" name="nome_evento" required>
+                    </div>
 
-                        <!-- Campo de regras -->
-                        <div class="mb-3">
-                            <label for="regras" class="form-label">Regras</label>
-                            <textarea class="form-control" id="regras" name="regras" required maxlength="2000"></textarea>
-                        </div>
-                        
-                        <!-- Campo de jogo -->
-                        <div class="mb-3">
-                            <label for="jogo" class="form-label">Jogo</label>
-                                <select class="form-select bg-dark text-light border-secondary" id="selectOption" required>
-                                    <option selected>Selecione um jogo</option>
-                                    <?php 
-                                        if (mysqli_num_rows($result_jogos) > 0) {
-                                            while ($jogo = mysqli_fetch_assoc($result_jogos)) {
-                                                echo "<option value=\"{$jogo['id_jogo']}\">{$jogo['nome_jogo']}</option>";
-                                            }
-                                        } else {
-                                            echo "<option value=\"\">Nenhum jogo existente</option>";
-                                        }
-                                    ?>
-                                </select>
-                        </div>
+                    <!-- Campo de data -->
+                    <div class="mb-3">
+                        <label for="data_evento" class="form-label">Data e hora do evento</label>
+                        <input type="datetime-local" class="form-control" id="data_evento" name="data_evento" required>
+                    </div>
 
-                        <!-- Endereço (Rua) -->
-                        <div class="mb-3">
-                            <label for="rua" class="form-label">Rua</label>
-                            <input type="text" class="form-control" name="rua" >
-                        </div>
+                    <!-- Campo de regras -->
+                    <div class="mb-3">
+                        <label for="regras" class="form-label">Regras</label>
+                        <textarea class="form-control" id="regras" name="regras" required maxlength="2000"></textarea>
+                    </div>
+                    
+                    <!-- Campo de jogo -->
+                    <div class="mb-3">
+                        <label for="jogo" class="form-label">Jogo</label>
+                        <select class="form-select bg-dark text-light border-secondary" id="jogo" name="jogo_id" required>
+                            <option selected>Selecione um jogo</option>
+                            <?php 
+                                if (mysqli_num_rows($result_jogos) > 0) {
+                                    while ($jogo = mysqli_fetch_assoc($result_jogos)) {
+                                        echo "<option value=\"{$jogo['id_jogo']}\">{$jogo['nome_jogo']}</option>";
+                                    }
+                                } else {
+                                    echo "<option value=\"\">Nenhum jogo existente</option>";
+                                }
+                            ?>
+                        </select>
+                    </div>
 
-                        <!-- Endereço (Número) -->
-                        <div class="mb-3">
-                            <label for="numero" class="form-label">Número</label>
-                            <input type="text" class="form-control" name="numero" >
-                        </div>
+                    <!-- Endereço (Rua) -->
+                    <div class="mb-3">
+                        <label for="rua" class="form-label">Rua</label>
+                        <input type="text" class="form-control" name="rua" >
+                    </div>
 
-                        <!-- Endereço (Setor) -->
-                        <div class="mb-3">
-                            <label for="setor" class="form-label">Setor</label>
-                            <input type="text" class="form-control" name="setor" >
-                        </div>
+                    <!-- Endereço (Número) -->
+                    <div class="mb-3">
+                        <label for="numero" class="form-label">Número</label>
+                        <input type="text" class="form-control" name="numero" >
+                    </div>
 
-                        <!-- Endereço (Cidade) -->
-                        <div class="mb-3">
-                            <label for="cidade" class="form-label">Cidade</label>
-                            <input type="text" class="form-control" name="cidade" >
-                        </div>
+                    <!-- Endereço (Setor) -->
+                    <div class="mb-3">
+                        <label for="setor" class="form-label">Setor</label>
+                        <input type="text" class="form-control" name="setor" >
+                    </div>
 
-                        <!-- Endereço (Estado) -->
-                        <div class="mb-3">
-                            <label for="estado" class="form-label">Estado</label>
-                            <input type="text" class="form-control" name="estado" >
-                        </div>
+                    <!-- Endereço (Cidade) -->
+                    <div class="mb-3">
+                        <label for="cidade" class="form-label">Cidade</label>
+                        <input type="text" class="form-control" name="cidade" >
+                    </div>
 
-                        <!-- Endereço (País) -->
-                        <div class="mb-3">
-                            <label for="pais" class="form-label">País</label>
-                            <input type="text" class="form-control" name="pais" required>
-                        </div>
+                    <!-- Endereço (Estado) -->
+                    <div class="mb-3">
+                        <label for="estado" class="form-label">Estado</label>
+                        <input type="text" class="form-control" name="estado" >
+                    </div>
 
-                        <!-- Botão de registro -->
-                        <button type="submit" class="btn btn-primary w-100">Registrar</button>
-                    </form>
+                    <!-- Endereço (País) -->
+                    <div class="mb-3">
+                        <label for="pais" class="form-label">País</label>
+                        <input type="text" class="form-control" name="pais" required>
+                    </div>
+
+                    <!-- Botão de registro -->
+                    <button type="submit" class="btn btn-primary w-100">Registrar</button>
+                </form>
+
 
                 </div>
                 

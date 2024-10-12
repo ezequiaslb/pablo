@@ -1,31 +1,51 @@
-<!-- Registro do evento -->
-
-<?php 
-    //Conectando ao banco de dados.
-    include('../includes/conecta.php');
-
-    //Iniciando a sessão.
+<?php
     session_start();
+    include('../includes/conecta.php'); 
 
-    //Recebendo dados do formulário e sanitizando-os
-    
+// Verifica se o organizador está logado
+if (!isset($_SESSION['orgid'])) {
+    die("Você precisa estar logado como organizador para criar eventos.");
+}
 
-    //Usando os Prepared Statments no PHP para declarações SQL com segurança |||||| Declarações preparadas
-    $stmt = $conn -> prepare("INSERT INTO () VALUES ()");
+// Verifica se o formulário foi enviado
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    //Defininfo o parâmetro de cada variável para a inserção de valores.
-    $stmt -> bind_param("", $_COOKIE);
+    $nome_evento = $_POST['nome_evento'];
+    $data_evento =$_POST['data_evento'];
+    $regras = $_POST['regras'];
+    $jogo_id = (int) $_POST['jogo_id'];
+    $organizador_id = (int) $_SESSION['orgid'];
 
-    //Se executado terá uma mensagem de Registro concluído.
-    if ($stmt -> execute()){
-        $_SESSION['mensagem'] = "Novo evento adicionado";
-        header("Location: ../public/event.php");
+    // Inserir o evento na tabela 'evento'
+    $query_evento = "INSERT INTO evento (nome_evento, data_evento, regras, jogo_id, organizador_id) 
+                     VALUES ('$nome_evento', '$data_evento', '$regras', '$jogo_id', '$organizador_id')";
+
+    if (mysqli_query($conn, $query_evento)) {
+        // Obtém o ID do evento recém-criado
+        $evento_id = mysqli_insert_id($conn);
+
+        // Inserir o endereço relacionado ao evento
+        $rua = $_POST['rua'];
+        $numero = $_POST['numero'];
+        $setor = $_POST['setor'];
+        $cidade = $_POST['cidade'];
+        $estado = $_POST['estado'];
+        $pais =$_POST['pais'];
+
+        $query_endereco = "INSERT INTO endereco (rua, numero, setor, cidade, estado, pais, evento_id) 
+                           VALUES ('$rua', '$numero', '$setor', '$cidade', '$estado', '$pais', '$evento_id')";
+
+        if (mysqli_query($conn, $query_endereco)) {
+            // Redireciona para a página de sucesso ou eventos
+            header('Location: ../public/event.php?success=1');
+            exit;
+        } else {
+            echo "Erro ao inserir o endereço: " . mysqli_error($conn);
+        }
+    } else {
+        echo "Erro ao inserir o evento: " . mysqli_error($conn);
     }
-    //Se não exibir o erro e tentar novamente.
-    else{
-        $_SESSION['mensagem'] = "Erro: " . $stmt -> error;
-        header("Location: ../public/adm.php");
-    }
-
-    $stmt -> close(); //Encerrando o $stmt (São declarações preparadas)
-    $conn -> close(); //Encerrando o $conn (É a conecção com o banco de dados)
+} else {
+    echo "Método inválido.";
+}
+?>
