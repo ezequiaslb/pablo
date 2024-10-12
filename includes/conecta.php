@@ -1,7 +1,7 @@
 <?php
     $host = 'localhost';
-    $user = 'root';
-    $pass = '';
+    $user = 'ezequias';
+    $pass = '[SYLlmSDrngBRroi';
     $db = 'monkeygames';
 
     //Conectando com o mySLQ.

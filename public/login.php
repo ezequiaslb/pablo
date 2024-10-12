@@ -65,7 +65,7 @@
         <section>
         <?php 
             if (isset($_SESSION['mensagem'])) {
-                echo "<p class='display-8'>" . $_SESSION['mensagem'] . "</p>";
+                echo "<div class='alert alert-warning' role='alert'>" . $_SESSION['mensagem'] . "</div>";
                 unset($_SESSION['mensagem']);
             }
 ?>  

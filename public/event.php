@@ -7,36 +7,31 @@
     $isPlayerLogged = isset($_SESSION['playerid']);
 
     // Consulta SQL para trazer os eventos e as informações relacionadas
-    $queryEventos = "
-                        SELECT 
-                            e.id_evento,
-                            e.nome_evento,
-                            e.data_evento,
-                            e.regras,
-                            j.nome_jogo,
-                            o.nome_org,
-                            COUNT(i.id_inscricao) AS qtd_participantes,
-                            CONCAT(end.rua, ' - ', end.numero, ' - ', end.setor, ' - ', end.cidade, ' - ', end.estado, ' - ', end.pais) endereco
-                        FROM
-                            evento e
-                        JOIN
-                            jogo j ON e.jogo_id = j.id_jogo
-                        JOIN
-                            organizador o ON e.organizador_id = o.id_organizador
-                        LEFT JOIN
-                            inscricao i ON i.evento_id = e.id_evento
-                        JOIN 
-                            endereco AS end ON end.evento_id = e.id_evento
-                        WHERE
-                            e.data_evento >= CURDATE()
-                        GROUP BY
-                            e.id_evento
-                        ORDER BY 
-                            e.data_evento ASC
-                        ; 
-
-                    "
-    ;
+    $queryEventos = "SELECT 
+                        e.id_evento,
+                        e.nome_evento,
+                        e.data_evento,
+                        e.regras,
+                        j.nome_jogo,
+                        o.nome_org,
+                        COUNT(i.id_inscricao) AS qtd_participantes,
+                        CONCAT(end.rua, ' - ', end.numero, ' - ', end.setor, ' - ', end.cidade, ' - ', end.estado, ' - ', end.pais) AS endereco
+                    FROM
+                        evento e
+                    JOIN
+                        jogo j ON e.jogo_id = j.id_jogo
+                    JOIN
+                        organizador o ON e.organizador_id = o.id_organizador
+                    LEFT JOIN
+                        inscricao i ON i.evento_id = e.id_evento
+                    JOIN 
+                        endereco end ON end.evento_id = e.id_evento
+                    WHERE
+                        e.data_evento >= CURDATE()
+                    GROUP BY
+                        e.id_evento, e.nome_evento, e.data_evento, e.regras, j.nome_jogo, o.nome_org, endereco
+                    ORDER BY 
+                        e.data_evento ASC";
 
     // Executa a consulta
     $resultEventos = mysqli_query($conn, $queryEventos);
